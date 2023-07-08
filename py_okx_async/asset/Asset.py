@@ -12,7 +12,12 @@ from py_okx_async.models import Methods
 class Asset(Base):
     """
     The class contains functions from the 'Asset' section.
+
+    Attributes:
+        section (str): a section name.
+
     """
+    section: str = 'asset'
 
     async def currencies(self, token_symbol: Optional[str] = None) -> Dict[str, Dict[str, Currency]]:
         """
@@ -27,11 +32,12 @@ class Asset(Base):
                 withdrawn.
 
         """
+        method = 'currencies'
         body = {
             'ccy': token_symbol
         }
         response = await self.make_request(
-            method=Methods.GET, request_path='/api/v5/asset/currencies', body=aiohttp_params(body)
+            method=Methods.GET, request_path=f'/api/v5/{self.section}/{method}', body=aiohttp_params(body)
         )
         currencies = {}
         for currency in response.get('data'):
@@ -57,11 +63,12 @@ class Asset(Base):
             Dict[str, FundingToken]: the dictionary with tokens and their balances in the funding account.
 
         """
+        method = 'balances'
         body = {
             'ccy': token_symbol
         }
         response = await self.make_request(
-            method=Methods.GET, request_path='/api/v5/asset/balances', body=aiohttp_params(body)
+            method=Methods.GET, request_path=f'/api/v5/{self.section}/{method}', body=aiohttp_params(body)
         )
         tokens = {}
         for token in response.get('data'):
@@ -95,6 +102,7 @@ class Asset(Base):
             Dict[int, Withdrawal]: the dictionary with withdrawal IDs and information about withdrawals.
 
         """
+        method = 'withdrawal-history'
         body = {
             'ccy': token_symbol,
             'wdId': str(wdId) if wdId else None,
@@ -112,7 +120,7 @@ class Asset(Base):
             body['before'] = before * 1000 if len(str(before)) == 10 else before
 
         response = await self.make_request(
-            method=Methods.GET, request_path='/api/v5/asset/withdrawal-history', body=aiohttp_params(body)
+            method=Methods.GET, request_path=f'/api/v5/{self.section}/{method}', body=aiohttp_params(body)
         )
         withdrawals = {}
         for withdrawal in response.get('data'):
@@ -146,6 +154,7 @@ class Asset(Base):
             WithdrawalToken: an instance with information about the withdrawal.
 
         """
+        method = 'withdrawal'
         body = {
             'ccy': token_symbol,
             'amt': str(amount),
@@ -157,7 +166,7 @@ class Asset(Base):
             'clientId': str(clientId) if clientId else None
         }
         response = await self.make_request(
-            method=Methods.POST, request_path='/api/v5/asset/withdrawal', body=aiohttp_params(body)
+            method=Methods.POST, request_path=f'/api/v5/{self.section}/{method}', body=aiohttp_params(body)
         )
         return WithdrawalToken(data=response.get('data')[0])
 
@@ -172,10 +181,11 @@ class Asset(Base):
             int: the withdrawal ID.
 
         """
+        method = 'cancel-withdrawal'
         body = {
             'wdId': str(wdId)
         }
         response = await self.make_request(
-            method=Methods.POST, request_path='/api/v5/asset/cancel-withdrawal', body=aiohttp_params(body)
+            method=Methods.POST, request_path=f'/api/v5/{self.section}/{method}', body=aiohttp_params(body)
         )
         return int(response.get('data')[0]['wdId'])
