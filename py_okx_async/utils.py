@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 
 import aiohttp
 from aiohttp_socks import ProxyConnector
@@ -56,3 +56,8 @@ async def async_post(
                 return response
 
             raise exceptions.APIException(response=response, status_code=status_code)
+
+
+async def secs_to_millisecs(secs: Union[int, float, str]) -> int:
+    secs = int(secs)
+    return secs * 1000 if len(str(secs)) == 10 else secs

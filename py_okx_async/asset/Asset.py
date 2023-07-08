@@ -7,6 +7,7 @@ from py_okx_async.asset.models import (
     Currency, FundingToken, WithdrawalType, WithdrawalTypes, WithdrawalStatus, Withdrawal, WithdrawalToken
 )
 from py_okx_async.models import Methods
+from py_okx_async.utils import secs_to_millisecs
 
 
 class Asset(Base):
@@ -114,10 +115,10 @@ class Asset(Base):
         }
 
         if after:
-            body['after'] = after * 1000 if len(str(after)) == 10 else after
+            body['after'] = await secs_to_millisecs(secs=after)
 
         if before:
-            body['before'] = before * 1000 if len(str(before)) == 10 else before
+            body['before'] = await secs_to_millisecs(secs=before)
 
         response = await self.make_request(
             method=Methods.GET, request_path=f'/api/v5/{self.section}/{method}', body=aiohttp_params(body)
