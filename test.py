@@ -76,11 +76,13 @@ if __name__ == '__main__':
         passphrase=str(os.getenv('PASSPHRASE')) if os.getenv('PASSPHRASE') else ''
     )
     if credentials.completely_filled():
-        okx_client = OKXClient(credentials=credentials, entrypoint_url=str(os.getenv('ENTRYPOINT_URL')))
+        okx_client = OKXClient(
+            credentials=credentials, entrypoint_url=str(os.getenv('ENTRYPOINT_URL')), proxy=str(os.getenv('PROXY'))
+        )
         toAddr = str(os.getenv('TO_ADDR'))
         wdId = str(os.getenv('WD_ID'))
 
-        loop = asyncio.new_event_loop()
+        loop = asyncio.get_event_loop()
         loop.run_until_complete(main())
 
     else:

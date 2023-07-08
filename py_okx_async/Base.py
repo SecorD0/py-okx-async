@@ -5,6 +5,8 @@ from datetime import datetime
 from typing import Optional, Union, Dict, Any
 from urllib.parse import urlencode
 
+from aiohttp_socks import ProxyConnector
+
 from py_okx_async import exceptions
 from py_okx_async.models import OKXCredentials, Methods
 from py_okx_async.utils import async_get, async_post
@@ -15,23 +17,38 @@ class Base:
     The base class for all section classes.
 
     Attributes:
-        entrypoint_url: an entrypoint URL.
+        entrypoint_url (str): an entrypoint URL.
+        proxy (str): an HTTP or SOCKS5 IPv4 proxy dictionary.
+        connector (Optional[ProxyConnector]): a connector.
 
     """
     __credentials: OKXCredentials
     entrypoint_url: str
+    proxy: Optional[str]
+    connector: Optional[ProxyConnector] = None
 
-    def __init__(self, credentials: OKXCredentials, entrypoint_url: str) -> None:
+    def __init__(self, credentials: OKXCredentials, entrypoint_url: str, proxy: Optional[str]) -> None:
         """
         Initialize the class.
 
         Args:
             credentials (OKXCredentials): an instance with all OKX API key data.
             entrypoint_url (str): an API entrypoint url.
+            proxy (Optional[str]): an HTTP or SOCKS5 IPv4 proxy in one of the following formats:
+                - login:password@proxy:port
+                - http://login:password@proxy:port
+                - socks5://login:password@proxy:port
+                - proxy:port
+                - http://proxy:port
 
         """
         self.__credentials = credentials
         self.entrypoint_url = entrypoint_url
+        self.proxy = proxy
+        if proxy:
+            self.connector = ProxyConnector.from_url(
+                url=proxy.replace('socks5h', 'socks5'), rdns=True, force_close=True
+            )
 
     @staticmethod
     async def get_timestamp() -> str:
@@ -100,12 +117,14 @@ class Base:
             'OK-ACCESS-PASSPHRASE': self.__credentials.passphrase
         }
         if method == Methods.POST:
-            response = await async_post(url, headers=header, data=json.dumps(body) if isinstance(body, dict) else body)
+            response = await async_post(
+                url, headers=header, connector=self.connector, data=json.dumps(body) if isinstance(body, dict) else body
+            )
 
         else:
-            response = await async_get(url, headers=header)
+            response = await async_get(url, headers=header, connector=self.connector)
 
         if int(response.get('code')):
-            raise exceptions.OKXAPIException(response=response)
+            raise exceptions.APIException(response=response)
 
         return response
