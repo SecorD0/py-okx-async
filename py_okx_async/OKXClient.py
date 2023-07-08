@@ -2,7 +2,7 @@ from typing import Optional, Dict
 
 import requests
 
-from py_okx_async.Asset import Asset
+from py_okx_async.asset.Asset import Asset
 from py_okx_async.exceptions import InvalidProxy
 from py_okx_async.models import OKXCredentials
 

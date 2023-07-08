@@ -3,9 +3,10 @@ from typing import Optional, Dict, Union
 from pretty_utils.miscellaneous.http import aiohttp_params
 
 from py_okx_async.Base import Base
-from py_okx_async.models import (
-    FundingToken, Withdrawal, Currency, WithdrawalToken, Methods, WithdrawalType, WithdrawalStatus, WithdrawalTypes
+from py_okx_async.asset.models import (
+    Currency, FundingToken, WithdrawalType, WithdrawalTypes, WithdrawalStatus, Withdrawal, WithdrawalToken
 )
+from py_okx_async.models import Methods
 
 
 class Asset(Base):
@@ -79,7 +80,7 @@ class Asset(Base):
 
         Args:
             token_symbol (Optional[str]): token symbol, e.g. BTC. (absolutely all)
-            wdId (Optional[Union[str, int]]_: withdrawal ID. (None)
+            wdId (Optional[Union[str, int]]): withdrawal ID. (None)
             clientId (Optional[Union[str, int]]): client-supplied ID. (absolutely all)
             txId (Optional[str]): hash record of the deposit. (None)
             type (Optional[WithdrawalType]): withdrawal type. (absolutely all)
@@ -88,7 +89,7 @@ class Asset(Base):
                 Unix timestamp format in milliseconds, e.g. 1654041600000. (None)
             before (Optional[int]): pagination of data to return records newer than the requested ts,
                 Unix timestamp format in milliseconds, e.g. 1656633600000. (None)
-            limit (int_: number of results per request, he maximum is 100. (100)
+            limit (int): number of results per request, he maximum is 100. (100)
 
         Returns:
             Dict[int, Withdrawal]: the dictionary with withdrawal IDs and information about withdrawals.
