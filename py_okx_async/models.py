@@ -265,7 +265,7 @@ class Chains:
     }
 
     @staticmethod
-    def is_equal(chain_1: str, chain_2: str) -> bool:
+    def are_equal(chain_1: str, chain_2: str) -> bool:
         """
         Compare if the names of chains match in lowercase.
 
@@ -274,7 +274,7 @@ class Chains:
             chain_2 (str): the second chain name.
 
         Returns:
-            bool: True if chain are equal.
+            bool: True if chains are equal.
 
         """
         return chain_1.lower() == chain_2.lower()
