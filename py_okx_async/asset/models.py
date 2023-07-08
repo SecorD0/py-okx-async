@@ -1,12 +1,45 @@
 from dataclasses import dataclass
 from typing import Dict, Any, Optional
 
-from pretty_utils.type_functions.classes import AutoRepr
+from py_okx_async.models import ReprWithoutData
 
 
-class Currency(AutoRepr):
+class Currency(ReprWithoutData):
     """
     An instance of a currency.
+
+    Attributes:
+        data (Dict[str, Any]): the raw data.
+        canDep (bool): the availability to deposit from chain. false: not available, true: available.
+        canInternal (bool): the availability to internal transfer. false: not available, true: available.
+        canWd (bool): the availability to withdraw to chain. false: not available, true: available.
+        token_symbol (str): currency, e.g. BTC.
+        chain (str): chain name, e.g. USDT-ERC20, USDT-TRC20.
+        depQuotaFixed (Optional[str]): the fixed deposit limit, unit in USD. Return empty string if there is no
+            deposit limit.
+        depQuoteDailyLayer2 (Optional[float]): the layer2 network daily deposit limit.
+        logoLink (str): the logo link of currency.
+        mainNet (bool): if current chain is main net then return true, otherwise return false.
+        maxFee (float): the maximum withdrawal fee for normal address.
+        maxFeeForCtAddr (float): the maximum withdrawal fee for contract address.
+        maxWd (float): the maximum amount of currency withdrawal in a single transaction.
+        minDep (float): the minimum deposit amount of the currency in a single transaction.
+        minDepArrivalConfirm (int): the minimum number of blockchain confirmations to acknowledge fund deposit.
+            The account is credited after that, but the deposit can not be withdrawn.
+        minFee (float): the minimum withdrawal fee for normal address.
+        minFeeForCtAddr (float): the minimum withdrawal fee for contract address.
+        minWd (float): the minimum withdrawal amount of the currency in a single transaction.
+        minWdUnlockConfirm (int): the minimum number of blockchain confirmations required for withdrawal of a deposit.
+        name (str): name of currency. There is no related name when it is not shown.
+        needTag	(bool):	whether tag/memo information is required for withdrawal.
+        usedDepQuotaFixed (Optional[str]): the used amount of fixed deposit quota, unit in USD. Return empty string
+            if there is no deposit limit.
+        usedWdQuota (float): the amount of currency withdrawal used in the past 24 hours, unit in USD.
+        wdQuota (float): the withdrawal limit in the past 24 hours, unit in USD.
+        wdTickSz (int): the withdrawal precision, indicating the number of digits after the decimal point.
+            The withdrawal fee precision kept the same as withdrawal precision. The accuracy of internal transfer
+            withdrawal is 8 decimal places.
+
     """
 
     def __init__(self, data: Dict[str, Any]) -> None:
@@ -17,6 +50,7 @@ class Currency(AutoRepr):
             data (Dict[str, Any]): the dictionary with a currency data.
 
         """
+        self.data: Dict[str, Any] = data
         self.canDep: bool = data.get('canDep')
         self.canInternal: bool = data.get('canInternal')
         self.canWd: bool = data.get('canWd')
@@ -46,9 +80,17 @@ class Currency(AutoRepr):
         self.wdTickSz: int = int(data.get('wdTickSz'))
 
 
-class FundingToken(AutoRepr):
+class FundingToken(ReprWithoutData):
     """
     An instance of a funding token.
+
+    Attributes:
+        data (Dict[str, Any]): the raw data.
+        token_symbol (str): currency, e.g. BTC.
+        bal (float): balance.
+        frozenBal (float): frozen balance.
+        availBal (float): available balance. The balance that can be withdrawn or transferred or used for spot trading.
+
     """
 
     def __init__(self, data: Dict[str, Any]) -> None:
@@ -59,6 +101,7 @@ class FundingToken(AutoRepr):
             data (Dict[str, Any]): the dictionary with a funding token data.
 
         """
+        self.data: Dict[str, Any] = data
         self.token_symbol: str = data.get('ccy')
         self.bal: float = float(data.get('bal'))
         self.availBal: float = float(data.get('availBal'))
@@ -128,9 +171,38 @@ class WithdrawalStatuses:
     }
 
 
-class Withdrawal(AutoRepr):
+class Withdrawal(ReprWithoutData):
     """
     An instance of a withdrawal.
+
+    Attributes:
+        data (Dict[str, Any]): the raw data.
+        chain (str): chain name, e.g. USDT-ERC20, USDT-TRC20.
+        fee (float): withdrawal fee amount.
+        token_symbol (str): currency, e.g. BTC.
+        clientId (int): client-supplied ID.
+        amt (float): withdrawal amount.
+        txId (str): hash record of the withdrawal. This parameter will returned "" for internal transfers.
+        from_ (str): withdrawal account. It can be email/phone.
+        areaCodeFrom (str): area code for the phone number. If from is a phone number, this parameter returns
+            the area code for the phone number.
+        to_ (str): receiving address.
+        areaCodeTo (str): area code for the phone number. If to is a phone number, this parameter returns
+            the area code for the phone number.
+        state (WithdrawalStatus): status of withdrawal.
+        ts (int): time the withdrawal request was submitted, Unix timestamp format in milliseconds, e.g. 1655251200000.
+        wdId (int): withdrawal ID.
+        nonTradableAsset (Optional[bool]): whether it is a non-tradable asset or not true: non-tradable asset,
+            false: tradable asset.
+        tag (Optional[str]): some currencies require a tag for withdrawals. This is not returned if not required.
+        pmtId (Optional[str]): some currencies require a payment ID for withdrawals. This is not returned
+            if not required.
+        memo (Optional[str]): some currencies require this parameter for withdrawals. This is not returned
+            if not required.
+        addrEx (Optional[str]): withdrawal address attachment (This will not be returned if the currency
+            does not require this) e.g. TONCOIN attached tag name is comment, the return will be {'comment':'123456'}.
+        feeCcy (Optional[str]): withdrawal fee currency, e.g. USDT.
+
     """
 
     def __init__(self, data: Dict[str, Any]) -> None:
@@ -141,24 +213,42 @@ class Withdrawal(AutoRepr):
             data (Dict[str, Any]): the dictionary with a withdrawal data.
 
         """
+        self.data: Dict[str, Any] = data
         self.chain: str = '-'.join(data.get('chain').split('-')[1:])
         self.fee: float = float(data.get('fee'))
         self.token_symbol: str = data.get('ccy')
-        self.client_id: str = data.get('clientId')
-        self.amount: float = float(data.get('amt'))
-        self.tx_id: str = data.get('txId')
+        self.clientId: Optional[int] = data.get('clientId')
+        self.clientId = int(self.clientId) if self.clientId else None
+        self.amt: float = float(data.get('amt'))
+        self.txId: str = data.get('txId')
         self.from_: str = data.get('from')
-        self.area_code_from: str = data.get('areaCodeFrom')
+        self.areaCodeFrom: str = data.get('areaCodeFrom')
         self.to_: str = data.get('to')
-        self.area_code_to: str = data.get('areaCodeTo')
+        self.areaCodeTo: str = data.get('areaCodeTo')
         self.state: WithdrawalStatus = WithdrawalStatuses.statuses_dict[data.get('state')]
-        self.timestamp: int = int(int(data.get('ts')) / 1000) if data.get('ts') else 0
-        self.id: str = data.get('wdId')
+        self.ts: int = int(int(data.get('ts')) / 1000) if data.get('ts') else 0
+        self.wdId: int = int(data.get('wdId'))
+        self.nonTradableAsset: Optional[bool] = data.get('nonTradableAsset')
+        self.tag: Optional[str] = data.get('tag')
+        self.pmtId: Optional[str] = data.get('pmtId')
+        self.memo: Optional[str] = data.get('memo')
+        self.addrEx: Optional[str] = data.get('addrEx')
+        self.feeCcy: Optional[str] = data.get('feeCcy')
 
 
-class WithdrawalToken(AutoRepr):
+class WithdrawalToken(ReprWithoutData):
     """
     An instance of a withdrawal token.
+
+    Attributes:
+        data (Dict[str, Any]): the raw data.
+        amt (float): withdrawal amount.
+        wdId (int): withdrawal ID.
+        token_symbol (str): currency, e.g. BTC.
+        clientId (Optional[int]): client-supplied ID.
+        chain (str): chain name, e.g. USDT-ERC20, USDT-TRC20. A combination of case-sensitive alphanumerics,
+            all numbers, or all letters of up to 32 characters.
+
     """
 
     def __init__(self, data: Dict[str, Any]) -> None:
@@ -169,9 +259,10 @@ class WithdrawalToken(AutoRepr):
             data (Dict[str, Any]): the dictionary with a withdrawal token data.
 
         """
+        self.data: Dict[str, Any] = data
         self.amt: float = float(data.get('amt'))
         self.wdId: int = int(data.get('wdId'))
         self.token_symbol: str = data.get('ccy')
-        self.clientId: Optional[int] = data.get('wdId')
+        self.clientId: Optional[int] = data.get('clientId')
         self.clientId = int(self.clientId) if self.clientId else None
         self.chain: str = '-'.join(data.get('chain').split('-')[1:])

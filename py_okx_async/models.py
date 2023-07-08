@@ -1,6 +1,18 @@
 from dataclasses import dataclass
 
 
+class ReprWithoutData:
+    """
+    Contains a __repr__ function that automatically builds the output of a class using all its variables except 'data'.
+    """
+
+    def __repr__(self) -> str:
+        attributes = vars(self).copy()
+        del attributes['data']
+        values = ('{}={!r}'.format(key, value) for key, value in attributes.items())
+        return '{}({})'.format(self.__class__.__name__, ', '.join(values))
+
+
 @dataclass
 class OKXCredentials:
     """
