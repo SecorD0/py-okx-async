@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Dict, Any
 
 
 class ReprWithoutData:
@@ -11,6 +12,20 @@ class ReprWithoutData:
         del attributes['data']
         values = ('{}={!r}'.format(key, value) for key, value in attributes.items())
         return '{}({})'.format(self.__class__.__name__, ', '.join(values))
+
+
+@dataclass
+class StateName:
+    """
+    An instance with state and name attributes.
+
+    Attributes:
+        state (str): a state.
+        name (str): a name.
+
+    """
+    state: str
+    name: str
 
 
 @dataclass
@@ -287,3 +302,52 @@ class Chains:
 
         """
         return chain_1.lower() == chain_2.lower()
+
+
+class FundingToken(ReprWithoutData):
+    """
+    An instance of a funding token.
+
+    Attributes:
+        data (Dict[str, Any]): the raw data.
+        token_symbol (str): currency, e.g. BTC.
+        bal (float): balance.
+        frozenBal (float): frozen balance.
+        availBal (float): available balance. The balance that can be withdrawn or transferred or used for spot trading.
+
+    """
+
+    def __init__(self, data: Dict[str, Any]) -> None:
+        """
+        Initialize the class.
+
+        Args:
+            data (Dict[str, Any]): the dictionary with a funding token data.
+
+        """
+        self.data: Dict[str, Any] = data
+        self.token_symbol: str = data.get('ccy')
+        self.bal: float = float(data.get('bal'))
+        self.availBal: float = float(data.get('availBal'))
+        self.frozenBal: float = float(data.get('frozenBal'))
+
+
+@dataclass
+class AccountType(StateName):
+    """
+    An instance of an account type.
+    """
+    pass
+
+
+class AccountTypes:
+    """
+    An instance with all account types.
+    """
+    Funding = AccountType(state='6', name='funding')
+    Trading = AccountType(state='18', name='trading')
+
+    types_dict = {
+        '6': Funding,
+        '18': Trading
+    }

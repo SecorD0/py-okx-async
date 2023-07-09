@@ -5,6 +5,7 @@ import requests
 from py_okx_async.asset.Asset import Asset
 from py_okx_async.exceptions import InvalidProxy
 from py_okx_async.models import OKXCredentials
+from py_okx_async.subaccount.Subaccount import Subaccount
 
 
 class OKXClient:
@@ -71,3 +72,6 @@ class OKXClient:
             requests.get(self.entrypoint_url + '/api/v5/public/time', proxies={'http': self.proxy, 'https': self.proxy})
 
         self.asset = Asset(credentials=self.__credentials, entrypoint_url=self.entrypoint_url, proxy=self.proxy)
+        self.subaccount = Subaccount(
+            credentials=self.__credentials, entrypoint_url=self.entrypoint_url, proxy=self.proxy
+        )

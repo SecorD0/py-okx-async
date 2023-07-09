@@ -4,7 +4,8 @@ import os
 from dotenv import load_dotenv
 
 from py_okx_async.OKXClient import OKXClient
-from py_okx_async.models import OKXCredentials, Chains
+from py_okx_async.asset.models import TransferTypes
+from py_okx_async.models import OKXCredentials, Chains, AccountTypes
 
 
 class Asset:
@@ -47,7 +48,7 @@ class Asset:
     async def withdrawal() -> None:
         print('\n--- withdrawal ---')
         withdrawal_token = await okx_client.asset.withdrawal(
-            token_symbol='USDT', amount=100, toAddr=toAddr, fee=0.1, chain=Chains.ArbitrumOne
+            token_symbol='USDT', amount=100.851, toAddr=toAddr, fee=0.1, chain=Chains.ArbitrumOne
         )
         print(withdrawal_token)
 
@@ -56,6 +57,52 @@ class Asset:
         print('\n--- cancel_withdrawal ---')
         response = await okx_client.asset.cancel_withdrawal(wdId=wdId)
         print(response)
+
+    @staticmethod
+    async def transfer() -> None:
+        print('\n--- transfer ---')
+        transfer = await okx_client.asset.transfer(token_symbol='USDT', amount=10.1)
+        print('Funding -> Trading', transfer)
+        await asyncio.sleep(5)
+
+        transfer = await okx_client.asset.transfer(
+            token_symbol='USDT', amount=10.1, from_=AccountTypes.Trading, to_=AccountTypes.Funding
+        )
+        print('Trading -> Funding', transfer)
+        await asyncio.sleep(5)
+
+        transfer = await okx_client.asset.transfer(
+            token_symbol='USDT', amount=10.1, to_=AccountTypes.Funding, subAcct=subAcct, type=TransferTypes.MasterToSub
+        )
+        print('Master -> Sub', transfer)
+        await asyncio.sleep(5)
+
+        transfer = await okx_client.asset.transfer(
+            token_symbol='USDT', amount=10.1, to_=AccountTypes.Funding, subAcct=subAcct,
+            type=TransferTypes.SubToMasterMasterKey
+        )
+        print('Sub -> Master', transfer)
+
+
+class Subaccount:
+    @staticmethod
+    async def list() -> None:
+        print('\n--- list ---')
+        list = await okx_client.subaccount.list()
+        for name, info in list.items():
+            print(f'{name}: {info}')
+
+    @staticmethod
+    async def asset_balances() -> None:
+        print('\n--- asset_balances ---')
+        balances = await okx_client.subaccount.asset_balances(subAcct=subAcct, token_symbol='USDT')
+        for token_symbol, balance in balances.items():
+            print(f'{token_symbol}: {balance}')
+
+        print('---')
+        balances = await okx_client.subaccount.asset_balances(subAcct=subAcct)
+        for token_symbol, balance in balances.items():
+            print(f'{token_symbol}: {balance}')
 
 
 async def main() -> None:
@@ -66,6 +113,12 @@ async def main() -> None:
     await asset.withdrawal_history()
     await asset.withdrawal()
     await asset.cancel_withdrawal()
+    await asset.transfer()
+
+    print('--------- Subaccount ---------')
+    subaccount = Subaccount()
+    await subaccount.list()
+    await subaccount.asset_balances()
 
 
 if __name__ == '__main__':
@@ -81,6 +134,7 @@ if __name__ == '__main__':
         )
         toAddr = str(os.getenv('TO_ADDR'))
         wdId = str(os.getenv('WD_ID'))
+        subAcct = str(os.getenv('SUB_ACCT'))
 
         loop = asyncio.get_event_loop()
         loop.run_until_complete(main())

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Dict, Any, Optional
 
-from py_okx_async.models import ReprWithoutData
+from py_okx_async.models import ReprWithoutData, StateName, AccountType, AccountTypes
 
 
 class Currency(ReprWithoutData):
@@ -80,41 +80,12 @@ class Currency(ReprWithoutData):
         self.wdTickSz: int = int(data.get('wdTickSz'))
 
 
-class FundingToken(ReprWithoutData):
-    """
-    An instance of a funding token.
-
-    Attributes:
-        data (Dict[str, Any]): the raw data.
-        token_symbol (str): currency, e.g. BTC.
-        bal (float): balance.
-        frozenBal (float): frozen balance.
-        availBal (float): available balance. The balance that can be withdrawn or transferred or used for spot trading.
-
-    """
-
-    def __init__(self, data: Dict[str, Any]) -> None:
-        """
-        Initialize the class.
-
-        Args:
-            data (Dict[str, Any]): the dictionary with a funding token data.
-
-        """
-        self.data: Dict[str, Any] = data
-        self.token_symbol: str = data.get('ccy')
-        self.bal: float = float(data.get('bal'))
-        self.availBal: float = float(data.get('availBal'))
-        self.frozenBal: float = float(data.get('frozenBal'))
-
-
 @dataclass
-class WithdrawalType:
+class WithdrawalType(StateName):
     """
     An instance of a withdrawal type.
     """
-    state: str
-    name: str
+    pass
 
 
 class WithdrawalTypes:
@@ -126,12 +97,11 @@ class WithdrawalTypes:
 
 
 @dataclass
-class WithdrawalStatus:
+class WithdrawalStatus(StateName):
     """
     An instance of a withdrawal status.
     """
-    state: str
-    name: str
+    pass
 
 
 class WithdrawalStatuses:
@@ -225,8 +195,9 @@ class Withdrawal(ReprWithoutData):
         self.areaCodeFrom: str = data.get('areaCodeFrom')
         self.to_: str = data.get('to')
         self.areaCodeTo: str = data.get('areaCodeTo')
-        self.state: WithdrawalStatus = WithdrawalStatuses.statuses_dict[data.get('state')]
-        self.ts: int = int(int(data.get('ts')) / 1000) if data.get('ts') else 0
+        self.state: Optional[WithdrawalStatus] = WithdrawalStatuses.statuses_dict.get(data.get('state'))
+        self.ts: int = data.get('ts')
+        self.ts = int(int(self.ts) / 1000) if self.ts else 0
         self.wdId: int = int(data.get('wdId'))
         self.nonTradableAsset: Optional[bool] = data.get('nonTradableAsset')
         self.tag: Optional[str] = data.get('tag')
@@ -266,3 +237,63 @@ class WithdrawalToken(ReprWithoutData):
         self.clientId: Optional[int] = data.get('clientId')
         self.clientId = int(self.clientId) if self.clientId else None
         self.chain: str = '-'.join(data.get('chain').split('-')[1:])
+
+
+@dataclass
+class TransferType(StateName):
+    """
+    An instance of a transfer type.
+    """
+    pass
+
+
+class TransferTypes:
+    """
+    An instance with all transfer types.
+    """
+    WithinAccount = TransferType(state='0', name='within account')
+    MasterToSub = TransferType(state='1', name='master to sub')
+    SubToMasterMasterKey = TransferType(state='2', name='sub to master master key')
+    SubToMasterSubKey = TransferType(state='3', name='sub to master sub key')
+    SubToSub = TransferType(state='4', name='sub to sub')
+
+    statuses_dict = {
+        '0': WithinAccount,
+        '1': MasterToSub,
+        '2': SubToMasterMasterKey,
+        '3': SubToMasterSubKey,
+        '4': SubToSub
+    }
+
+
+class Transfer(ReprWithoutData):
+    """
+    An instance of a transfer.
+
+    Attributes:
+        data (Dict[str, Any]): the raw data.
+        transId (int): transfer ID.
+        clientId (Optional[int]): client-supplied ID.
+        token_symbol (str): currency, e.g. BTC.
+        from_ (AccountType): the remitting account.
+        amt (float): transfer amount.
+        to_ (AccountType): the beneficiary account.
+
+    """
+
+    def __init__(self, data: Dict[str, Any]) -> None:
+        """
+        Initialize the class.
+
+        Args:
+            data (Dict[str, Any]): the dictionary with a transfer data.
+
+        """
+        self.data: Dict[str, Any] = data
+        self.transId: int = int(data.get('transId'))
+        self.clientId: Optional[int] = data.get('clientId')
+        self.clientId = int(self.clientId) if self.clientId else None
+        self.token_symbol: str = data.get('ccy')
+        self.from_: AccountType = AccountTypes.types_dict.get(data.get('from'))
+        self.amt: float = float(data.get('amt'))
+        self.to_: AccountType = AccountTypes.types_dict.get(data.get('to'))

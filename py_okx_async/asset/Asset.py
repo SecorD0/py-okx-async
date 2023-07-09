@@ -4,15 +4,16 @@ from pretty_utils.miscellaneous.http import aiohttp_params
 
 from py_okx_async.Base import Base
 from py_okx_async.asset.models import (
-    Currency, FundingToken, WithdrawalType, WithdrawalTypes, WithdrawalStatus, Withdrawal, WithdrawalToken
+    Currency, WithdrawalType, WithdrawalTypes, WithdrawalStatus, Withdrawal, WithdrawalToken, TransferType,
+    TransferTypes, Transfer
 )
-from py_okx_async.models import Methods
+from py_okx_async.models import Methods, FundingToken, AccountType, AccountTypes
 from py_okx_async.utils import secs_to_millisecs
 
 
 class Asset(Base):
     """
-    The class contains functions from the 'Asset' section.
+    The class contains functions from the 'asset' section.
 
     Attributes:
         section (str): a section name.
@@ -190,3 +191,46 @@ class Asset(Base):
             method=Methods.POST, request_path=f'/api/v5/{self.section}/{method}', body=aiohttp_params(body)
         )
         return int(response.get('data')[0]['wdId'])
+
+    async def transfer(
+            self, token_symbol: str, amount: Union[float, int, str], from_: AccountType = AccountTypes.Funding,
+            to_: AccountType = AccountTypes.Trading, subAcct: Optional[str] = None,
+            type: TransferType = TransferTypes.WithinAccount, loanTrans: bool = False,
+            clientId: Optional[Union[str, int]] = None, omitPosRisk: bool = False
+    ) -> Transfer:
+        """
+        Transfer tokens within account or between sub-accounts.
+
+        Args:
+            token_symbol (str): token symbol, e.g. USDT.
+            amount (Union[float, int, str]): amount to be transferred.
+            from_ (AccountType): the remitting account. (funding)
+            to_ (AccountType): the beneficiary account. (trading)
+            subAcct (str): name of the sub-account. When 'type' is 1, 2 or 4, sub-account is required. (None)
+            type (TransferType): transfer type. (within account)
+            loanTrans (bool): whether borrowed coins can be transferred out under Multi-currency margin
+                and Portfolio margin. (False)
+            clientId (Optional[Union[str, int]]): client-supplied ID. A combination of case-sensitive alphanumerics,
+                all numbers, or all letters of up to 32 characters. (None)
+            omitPosRisk (bool): ignore position risk. Applicable to Portfolio margin. (False)
+
+        Returns:
+            TransferredToken: an instance with information about the transfer.
+
+        """
+        method = 'transfer'
+        body = {
+            'ccy': token_symbol,
+            'amt': str(amount),
+            'from_': from_.state,
+            'to_': to_.state,
+            'subAcct': subAcct,
+            'type': type.state,
+            'loanTrans': loanTrans,
+            'clientId': str(clientId) if clientId else None,
+            'omitPosRisk': omitPosRisk
+        }
+        response = await self.make_request(
+            method=Methods.POST, request_path=f'/api/v5/{self.section}/{method}', body=aiohttp_params(body)
+        )
+        return Transfer(data=response.get('data')[0])

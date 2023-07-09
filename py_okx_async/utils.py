@@ -25,7 +25,7 @@ async def async_get(
     async with aiohttp.ClientSession(headers=headers, connector=connector, connector_owner=False) as session:
         async with session.get(url=url, **kwargs) as response:
             status_code = response.status
-            response = await response.json()
+            response = await response.json(encoding='utf-8')
             if status_code <= 201:
                 return response
 
@@ -51,7 +51,7 @@ async def async_post(
     async with aiohttp.ClientSession(headers=headers, connector=connector, connector_owner=False) as session:
         async with session.post(url=url, **kwargs) as response:
             status_code = response.status
-            response = await response.json()
+            response = await response.json(encoding='utf-8')
             if status_code <= 201:
                 return response
 
