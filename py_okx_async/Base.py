@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import Optional, Union, Dict, Any
 from urllib.parse import urlencode
 
+from aiohttp import TCPConnector
 from aiohttp_socks import ProxyConnector
 
 from py_okx_async import exceptions
@@ -25,7 +26,7 @@ class Base:
     __credentials: OKXCredentials
     entrypoint_url: str
     proxy: Optional[str]
-    connector: Optional[ProxyConnector] = None
+    connector: Union[ProxyConnector, TCPConnector] = TCPConnector(force_close=True)
 
     def __init__(self, credentials: OKXCredentials, entrypoint_url: str, proxy: Optional[str]) -> None:
         """
@@ -118,11 +119,12 @@ class Base:
         }
         if method == Methods.POST:
             response = await async_post(
-                url, headers=header, connector=self.connector, data=json.dumps(body) if isinstance(body, dict) else body
+                url=url, headers=header, connector=self.connector,
+                data=json.dumps(body) if isinstance(body, dict) else body
             )
 
         else:
-            response = await async_get(url, headers=header, connector=self.connector)
+            response = await async_get(url=url, headers=header, connector=self.connector)
 
         if int(response.get('code')):
             raise exceptions.APIException(response=response)
