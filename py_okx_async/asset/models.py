@@ -13,7 +13,7 @@ class Currency(ReprWithoutData):
         canDep (bool): the availability to deposit from chain. false: not available, true: available.
         canInternal (bool): the availability to internal transfer. false: not available, true: available.
         canWd (bool): the availability to withdraw to chain. false: not available, true: available.
-        token_symbol (str): currency, e.g. BTC.
+        token_symbol (str): token symbol, e.g. BTC.
         chain (str): chain name, e.g. USDT-ERC20, USDT-TRC20.
         depQuotaFixed (Optional[str]): the fixed deposit limit, unit in USD. Return empty string if there is no
             deposit limit.
@@ -81,19 +81,102 @@ class Currency(ReprWithoutData):
 
 
 @dataclass
-class WithdrawalType(StateName):
+class TransactionType(StateName):
     """
-    An instance of a withdrawal type.
+    An instance of a deposit/withdrawal type.
     """
     pass
 
 
-class WithdrawalTypes:
+class TransactionTypes:
     """
-    An instance with all withdrawal types.
+    An instance with all deposit/withdrawal types.
     """
-    Internal = WithdrawalType(state='3', name='internal')
-    OnChain = WithdrawalType(state='4', name='on-chain')
+    Internal = TransactionType(state='3', name='internal')
+    OnChain = TransactionType(state='4', name='on-chain')
+
+
+@dataclass
+class DepositStatus(StateName):
+    """
+    An instance of a deposit status.
+    """
+    pass
+
+
+class DepositStatuses:
+    """
+    An instance with all deposit statuses.
+    """
+    WaitingForConfirmation = DepositStatus(state='0', name='waiting for confirmation')
+    Credited = DepositStatus(state='1', name='deposit credited')
+    Successful = DepositStatus(state='2', name='deposit successful')
+    Pending = DepositStatus(state='8', name='pending due to temporary deposit suspension on this crypto currency')
+    BlacklistedAddress = DepositStatus(state='11', name='match the address blacklist')
+    Frozen = DepositStatus(state='12', name='account or deposit is frozen')
+    Subaccount = DepositStatus(state='13', name='sub-account deposit interception')
+    KYCLimit = DepositStatus(state='14', name='KYC limit')
+
+    statuses_dict = {
+        '0': WaitingForConfirmation,
+        '1': Credited,
+        '2': Successful,
+        '8': Pending,
+        '11': BlacklistedAddress,
+        '12': Frozen,
+        '13': Subaccount,
+        '14': KYCLimit
+    }
+
+
+class Deposit(ReprWithoutData):
+    """
+    An instance of a withdrawal.
+
+    Attributes:
+        data (Dict[str, Any]): the raw data.
+        token_symbol (str): token symbol, e.g. BTC.
+        chain (str): chain name, e.g. USDT-ERC20, USDT-TRC20.
+        amt (float): deposit amount.
+        from_ (str): deposite account. If the deposit comes from an internal transfer, this field displays
+            the account information of the internal transfer initiator, which can be mobile phone number,
+            email address, account name, and will return "" in other cases.
+        areaCodeFrom (str): if from is a phone number, this parameter return area code of the phone number.
+        to_ (str): deposit address. If the deposit comes from the on-chain, this field displays the on-chain address,
+            and will return "" in other cases.
+        txId (str): hash record of the deposit.
+        ts (int): time that the deposit is credited, Unix timestamp format in milliseconds, e.g. 1655251200000.
+        state (Optional[DepositStatus]): status of deposit.
+        depId (int): deposit ID.
+        fromWdId (int): internal transfer initiator's withdrawal ID. If the deposit comes from internal transfer,
+            this field displays the withdrawal ID of the internal transfer initiator, and will return "" in other cases.
+        actualDepBlkConfirm (int): actual amount of blockchain confirm in a single deposit.
+
+    """
+
+    def __init__(self, data: Dict[str, Any]) -> None:
+        """
+        Initialize the class.
+
+        Args:
+            data (Dict[str, Any]): the dictionary with a deposit data.
+
+        """
+        self.data: Dict[str, Any] = data
+        self.token_symbol: str = data.get('ccy')
+        self.chain: str = '-'.join(data.get('chain').split('-')[1:])
+        self.amt: float = float(data.get('amt'))
+        self.from_: str = data.get('from')
+        self.areaCodeFrom: str = data.get('areaCodeFrom')
+        self.to_: str = data.get('to')
+        self.txId: str = data.get('txId')
+        self.ts: int = data.get('ts')
+        self.ts = int(int(self.ts) / 1000) if self.ts else 0
+        self.state: Optional[DepositStatus] = DepositStatuses.statuses_dict.get(data.get('state'))
+        self.depId: int = int(data.get('depId'))
+        self.fromWdId: Optional[int] = data.get('fromWdId')
+        self.fromWdId = int(self.fromWdId) if self.fromWdId else None
+        self.actualDepBlkConfirm: int = int(data.get('actualDepBlkConfirm'))
 
 
 @dataclass
@@ -149,7 +232,7 @@ class Withdrawal(ReprWithoutData):
         data (Dict[str, Any]): the raw data.
         chain (str): chain name, e.g. USDT-ERC20, USDT-TRC20.
         fee (float): withdrawal fee amount.
-        token_symbol (str): currency, e.g. BTC.
+        token_symbol (str): token symbol, e.g. BTC.
         clientId (int): client-supplied ID.
         amt (float): withdrawal amount.
         txId (str): hash record of the withdrawal. This parameter will returned "" for internal transfers.
@@ -159,7 +242,7 @@ class Withdrawal(ReprWithoutData):
         to_ (str): receiving address.
         areaCodeTo (str): area code for the phone number. If to is a phone number, this parameter returns
             the area code for the phone number.
-        state (WithdrawalStatus): status of withdrawal.
+        state (Optional[WithdrawalStatus]): status of withdrawal.
         ts (int): time the withdrawal request was submitted, Unix timestamp format in milliseconds, e.g. 1655251200000.
         wdId (int): withdrawal ID.
         nonTradableAsset (Optional[bool]): whether it is a non-tradable asset or not true: non-tradable asset,
@@ -215,7 +298,7 @@ class WithdrawalToken(ReprWithoutData):
         data (Dict[str, Any]): the raw data.
         amt (float): withdrawal amount.
         wdId (int): withdrawal ID.
-        token_symbol (str): currency, e.g. BTC.
+        token_symbol (str): token symbol, e.g. BTC.
         clientId (Optional[int]): client-supplied ID.
         chain (str): chain name, e.g. USDT-ERC20, USDT-TRC20. A combination of case-sensitive alphanumerics,
             all numbers, or all letters of up to 32 characters.
@@ -274,7 +357,7 @@ class Transfer(ReprWithoutData):
         data (Dict[str, Any]): the raw data.
         transId (int): transfer ID.
         clientId (Optional[int]): client-supplied ID.
-        token_symbol (str): currency, e.g. BTC.
+        token_symbol (str): token symbol, e.g. BTC.
         from_ (AccountType): the remitting account.
         amt (float): transfer amount.
         to_ (AccountType): the beneficiary account.

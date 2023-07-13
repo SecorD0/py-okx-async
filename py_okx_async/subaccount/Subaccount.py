@@ -32,7 +32,7 @@ class Subaccount(Base):
                 will be a Unix timestamp in millisecond format. (None)
             before (Optional[int]): if you query the data after the requested creation time ID, the value
                 will be a Unix timestamp in millisecond format. (None)
-            limit (int): number of results per request. The maximum is 100. The default is 100. (100)
+            limit (int): number of results per request, the maximum is 100. (100)
 
         Returns:
             Dict[str, SubaccountInfo]: the dictionary with sub-account names and information about them.
@@ -66,7 +66,7 @@ class Subaccount(Base):
 
         Args:
             subAcct (str): sub-account name.
-            token_symbol (Optional[str]): single currency or multiple token symbol (no more than 20) separated
+            token_symbol (Optional[str]): single or multiple token symbol (no more than 20) separated
                 with comma, e.g. BTC or BTC,ETH. (absolutely all)
 
         Returns:

@@ -310,7 +310,7 @@ class FundingToken(ReprWithoutData):
 
     Attributes:
         data (Dict[str, Any]): the raw data.
-        token_symbol (str): currency, e.g. BTC.
+        token_symbol (str): token symbol, e.g. BTC.
         bal (float): balance.
         frozenBal (float): frozen balance.
         availBal (float): available balance. The balance that can be withdrawn or transferred or used for spot trading.
