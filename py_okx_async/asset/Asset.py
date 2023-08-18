@@ -184,8 +184,8 @@ class Asset(Base):
         return withdrawals
 
     async def withdrawal(
-            self, token_symbol: str, amount: Union[float, int, str], toAddr: str,
-            fee: Union[float, int, str], chain: str, dest: TransactionType = TransactionTypes.OnChain,
+            self, token_symbol: str, amount: Union[float, int, str], toAddr: str, chain: str,
+            dest: TransactionType = TransactionTypes.OnChain, fee: Optional[Union[float, int, str]] = None,
             areaCode: Union[int, str] = None, clientId: Optional[Union[str, int]] = None
     ) -> WithdrawalToken:
         """
@@ -197,9 +197,9 @@ class Asset(Base):
             toAddr (str): if your dest is 4,toAddr should be a trusted crypto currency address. Some crypto currency
                 addresses are formatted as 'address:tag', e.g. 'ARDOR-7JF3-8F2E-QUWZ-CAN7F:123456'. If your dest is 3,
                 toAddr should be a recipient address which can be email, phone or login account name.
-            fee (Union[float, int, str]): transaction fee.
             chain (str): chain name.
             dest (TransactionType): withdrawal method. (on-chain)
+            fee (Union[float, int, str]): transaction fee. (minimal, parsed using the 'currencies' function)
             areaCode (Optional[str]): area code for the phone number. If toAddr is a phone number, this parameter is
                 required. (None)
             clientId (Optional[Union[str, int]]): Client-supplied ID. A combination of case-sensitive alphanumerics,
@@ -210,6 +210,10 @@ class Asset(Base):
 
         """
         method = 'withdrawal'
+        if not fee:
+            currency = await self.currencies(token_symbol=token_symbol)
+            fee = currency[token_symbol][chain].minFee
+
         body = {
             'ccy': token_symbol,
             'amt': str(amount),
