@@ -89,7 +89,7 @@ class Chains:
     Cardano = 'Cardano'
     Casper = 'Casper'
     Chia = 'Chia'
-    Chiliz = 'Chiliz'
+    ChilizLegacyChain = 'Chiliz Legacy Chain'
     Conflux = 'Conflux'
     Cortex = 'Cortex'
     Cosmos = 'Cosmos'
@@ -143,6 +143,7 @@ class Chains:
     OmegaChain = 'Omega Chain'
     Ontology = 'Ontology'
     Optimism = 'Optimism'
+    OptimismV1 = 'Optimism (V1)'
     PlatON = 'PlatON'
     Polkadot = 'Polkadot'
     Polygon = 'Polygon'
@@ -154,6 +155,7 @@ class Chains:
     SUI = 'SUI'
     Siacoin = 'Siacoin'
     Solana = 'Solana'
+    Starknet = 'Starknet'
     StellarLumens = 'Stellar Lumens'
     StepNetwork = 'Step Network'
     TON = 'TON'
@@ -162,7 +164,6 @@ class Chains:
     TerraClassic = 'Terra Classic'
     Tezos = 'Tezos'
     Theta = 'Theta'
-    TrueChain = 'TrueChain'
     UMEE = 'UMEE'
     VSYSTEMS = 'VSYSTEMS'
     WAVES = 'WAVES'
@@ -200,7 +201,7 @@ class Chains:
         'cardano': Cardano,
         'casper': Casper,
         'chia': Chia,
-        'chiliz': Chiliz,
+        'chiliz legacy chain': ChilizLegacyChain,
         'conflux': Conflux,
         'cortex': Cortex,
         'cosmos': Cosmos,
@@ -254,6 +255,7 @@ class Chains:
         'omega chain': OmegaChain,
         'ontology': Ontology,
         'optimism': Optimism,
+        'optimism (v1)': OptimismV1,
         'platon': PlatON,
         'polkadot': Polkadot,
         'polygon': Polygon,
@@ -265,6 +267,7 @@ class Chains:
         'sui': SUI,
         'siacoin': Siacoin,
         'solana': Solana,
+        'starknet': Starknet,
         'stellar lumens': StellarLumens,
         'step network': StepNetwork,
         'ton': TON,
@@ -273,7 +276,6 @@ class Chains:
         'terra classic': TerraClassic,
         'tezos': Tezos,
         'theta': Theta,
-        'truechain': TrueChain,
         'umee': 'UMEE',
         'vsystems': VSYSTEMS,
         'waves': WAVES,
