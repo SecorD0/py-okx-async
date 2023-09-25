@@ -135,6 +135,7 @@ class Chains:
     Moonriver = 'Moonriver'
     N3 = 'N3'
     NEAR = 'NEAR'
+    NEO = 'NEO'
     NULS = 'NULS'
     Nano = 'Nano'
     NewEconomyMovement = 'New Economy Movement'
@@ -143,11 +144,12 @@ class Chains:
     OmegaChain = 'Omega Chain'
     Ontology = 'Ontology'
     Optimism = 'Optimism'
+    OptimismBridged = 'Optimism (Bridged)'
     OptimismV1 = 'Optimism (V1)'
+    OptimismV2 = 'Optimism (V2)'
     PlatON = 'PlatON'
     Polkadot = 'Polkadot'
     Polygon = 'Polygon'
-    PulseChain = 'PulseChain'
     Quantum = 'Quantum'
     Ravencoin = 'Ravencoin'
     Ripple = 'Ripple'
@@ -247,6 +249,7 @@ class Chains:
         'moonriver': Moonriver,
         'n3': N3,
         'near': NEAR,
+        'neo': NEO,
         'nuls': NULS,
         'nano': Nano,
         'new economy movement': NewEconomyMovement,
@@ -255,11 +258,12 @@ class Chains:
         'omega chain': OmegaChain,
         'ontology': Ontology,
         'optimism': Optimism,
+        'optimism (bridged)': OptimismBridged,
         'optimism (v1)': OptimismV1,
+        'optimism (v2)': OptimismV2,
         'platon': PlatON,
         'polkadot': Polkadot,
         'polygon': Polygon,
-        'pulsechain': PulseChain,
         'quantum': Quantum,
         'ravencoin': Ravencoin,
         'ripple': Ripple,
