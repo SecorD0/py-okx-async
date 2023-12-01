@@ -71,29 +71,31 @@ class Chains:
     Algorand = 'Algorand'
     Aptos = 'Aptos'
     ArbitrumOne = 'Arbitrum One'
-    ArbitrumOneBridged = 'Arbitrum One (Bridged)'
     Arweave = 'Arweave'
     Astar = 'Astar'
     AvalancheCChain = 'Avalanche C-Chain'
     AvalancheXChain = 'Avalanche X-Chain'
     BRC20 = 'BRC20'
     BSC = 'BSC'
+    Base = 'Base'
     Bitcoin = 'Bitcoin'
     BitcoinSV = 'Bitcoin SV'
     BitcoinCash = 'BitcoinCash'
-    Bytom = 'Bytom'
     CELO = 'CELO'
     CELOTOKEN = 'CELO-TOKEN'
     CFX_EVM = 'CFX_EVM'
     CORE = 'CORE'
     Cardano = 'Cardano'
     Casper = 'Casper'
+    Celestia = 'Celestia'
     Chia = 'Chia'
+    ChilizChain = 'Chiliz Chain'
     ChilizLegacyChain = 'Chiliz Legacy Chain'
     Conflux = 'Conflux'
     Cortex = 'Cortex'
     Cosmos = 'Cosmos'
     Crypto = 'Crypto'
+    DYDX = 'DYDX'
     Decred = 'Decred'
     Dfinity = 'Dfinity'
     Digibyte = 'Digibyte'
@@ -103,6 +105,8 @@ class Chains:
     ERC20 = 'ERC20'
     Elrond = 'Elrond'
     Eminer = 'Eminer'
+    EnduranceSmartChain = 'Endurance Smart Chain'
+    EnjinRelayChain = 'Enjin Relay Chain'
     EthereumClassic = 'Ethereum Classic'
     EthereumPoW = 'EthereumPoW'
     FEVM = 'FEVM'
@@ -110,27 +114,27 @@ class Chains:
     Fantom = 'Fantom'
     Filecoin = 'Filecoin'
     Flare = 'Flare'
-    Fusion = 'Fusion'
     Harmony = 'Harmony'
     Hedera = 'Hedera'
-    Horizen = 'Horizen'
     HyperCash = 'HyperCash'
     ICON = 'ICON'
-    INTCHAIN = 'INTCHAIN'
+    INJ = 'INJ'
     IOST = 'IOST'
     KAR = 'KAR'
     Kadena = 'Kadena'
     Khala = 'Khala'
     Klaytn = 'Klaytn'
     Kusama = 'Kusama'
+    Layer3 = 'Layer 3'
     Lightning = 'Lightning'
+    Linea = 'Linea'
     Linkeye = 'Linkeye'
     Lisk = 'Lisk'
     Litecoin = 'Litecoin'
     MIOTA = 'MIOTA'
     Metis = 'Metis'
+    MetisTokenTransfer = 'Metis (Token Transfer)'
     Mina = 'Mina'
-    Monero = 'Monero'
     Moonbeam = 'Moonbeam'
     Moonriver = 'Moonriver'
     N3 = 'N3'
@@ -145,11 +149,11 @@ class Chains:
     Ontology = 'Ontology'
     Optimism = 'Optimism'
     OptimismBridged = 'Optimism (Bridged)'
-    OptimismV1 = 'Optimism (V1)'
     OptimismV2 = 'Optimism (V2)'
     PlatON = 'PlatON'
     Polkadot = 'Polkadot'
     Polygon = 'Polygon'
+    PolygonBridged = 'Polygon (Bridged)'
     Quantum = 'Quantum'
     Ravencoin = 'Ravencoin'
     Ripple = 'Ripple'
@@ -166,18 +170,16 @@ class Chains:
     TerraClassic = 'Terra Classic'
     Tezos = 'Tezos'
     Theta = 'Theta'
-    UMEE = 'UMEE'
     VSYSTEMS = 'VSYSTEMS'
-    WAVES = 'WAVES'
     WGRT = 'WGRT'
     Wax = 'Wax'
     XANA = 'XANA'
     XEC = 'XEC'
     Zcash = 'Zcash'
+    ZetaChain = 'ZetaChain'
     Zilliqa = 'Zilliqa'
     lStacks = 'l-Stacks'
     zkSyncEra = 'zkSync Era'
-    zkSyncLite = 'zkSync Lite'
 
     all_chains = {
         'aelf': AELF,
@@ -185,29 +187,31 @@ class Chains:
         'algorand': Algorand,
         'aptos': Aptos,
         'arbitrum one': ArbitrumOne,
-        'arbitrum one (bridged)': ArbitrumOneBridged,
         'arweave': Arweave,
         'astar': Astar,
         'avalanche c-chain': AvalancheCChain,
         'avalanche x-chain': AvalancheXChain,
         'brc20': BRC20,
         'bsc': BSC,
+        'base': Base,
         'bitcoin': Bitcoin,
         'bitcoin sv': BitcoinSV,
         'bitcoincash': BitcoinCash,
-        'bytom': Bytom,
         'celo': CELO,
         'celo-token': CELOTOKEN,
         'cfx_evm': CFX_EVM,
         'core': CORE,
         'cardano': Cardano,
         'casper': Casper,
+        'celestia': Celestia,
         'chia': Chia,
+        'chiliz chain': ChilizChain,
         'chiliz legacy chain': ChilizLegacyChain,
         'conflux': Conflux,
         'cortex': Cortex,
         'cosmos': Cosmos,
         'crypto': Crypto,
+        'dydx': DYDX,
         'decred': Decred,
         'dfinity': Dfinity,
         'digibyte': Digibyte,
@@ -217,6 +221,8 @@ class Chains:
         'erc20': ERC20,
         'elrond': Elrond,
         'eminer': Eminer,
+        'endurance smart chain': EnduranceSmartChain,
+        'enjin relay chain': EnjinRelayChain,
         'ethereum classic': EthereumClassic,
         'ethereumpow': EthereumPoW,
         'fevm': FEVM,
@@ -224,27 +230,27 @@ class Chains:
         'fantom': Fantom,
         'filecoin': Filecoin,
         'flare': Flare,
-        'fusion': Fusion,
         'harmony': Harmony,
         'hedera': Hedera,
-        'horizen': Horizen,
         'hypercash': HyperCash,
         'icon': ICON,
-        'intchain': INTCHAIN,
+        'inj': INJ,
         'iost': IOST,
         'kar': KAR,
         'kadena': Kadena,
         'khala': Khala,
         'klaytn': Klaytn,
         'kusama': Kusama,
+        'layer 3': Layer3,
         'lightning': Lightning,
+        'linea': Linea,
         'linkeye': Linkeye,
         'lisk': Lisk,
         'litecoin': Litecoin,
         'miota': MIOTA,
         'metis': Metis,
+        'Metis (Token Transfer)': MetisTokenTransfer,
         'mina': Mina,
-        'monero': Monero,
         'moonbeam': Moonbeam,
         'moonriver': Moonriver,
         'n3': N3,
@@ -259,11 +265,11 @@ class Chains:
         'ontology': Ontology,
         'optimism': Optimism,
         'optimism (bridged)': OptimismBridged,
-        'optimism (v1)': OptimismV1,
         'optimism (v2)': OptimismV2,
         'platon': PlatON,
         'polkadot': Polkadot,
         'polygon': Polygon,
+        'polygon (bridged)': PolygonBridged,
         'quantum': Quantum,
         'ravencoin': Ravencoin,
         'ripple': Ripple,
@@ -280,18 +286,16 @@ class Chains:
         'terra classic': TerraClassic,
         'tezos': Tezos,
         'theta': Theta,
-        'umee': 'UMEE',
         'vsystems': VSYSTEMS,
-        'waves': WAVES,
         'wgrt': WGRT,
         'wax': Wax,
         'xana': XANA,
         'xec': XEC,
         'zcash': Zcash,
+        'zetachain': ZetaChain,
         'zilliqa': Zilliqa,
         'l-stacks': lStacks,
         'zksync era': zkSyncEra,
-        'zksync lite': zkSyncLite
     }
 
     @staticmethod
