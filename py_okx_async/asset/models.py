@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from decimal import Decimal
 from typing import Dict, Any, Optional
 
 from py_okx_async.models import ReprWithoutData, StateName, AccountType, AccountTypes
@@ -20,14 +21,14 @@ class Currency(ReprWithoutData):
         depQuoteDailyLayer2 (Optional[float]): the layer2 network daily deposit limit.
         logoLink (str): the logo link of currency.
         mainNet (bool): if current chain is main net then return true, otherwise return false.
-        maxFee (float): the maximum withdrawal fee for normal address.
-        maxFeeForCtAddr (float): the maximum withdrawal fee for contract address.
+        maxFee (Decimal): the maximum withdrawal fee for normal address.
+        maxFeeForCtAddr (Decimal): the maximum withdrawal fee for contract address.
         maxWd (float): the maximum amount of currency withdrawal in a single transaction.
         minDep (float): the minimum deposit amount of the currency in a single transaction.
         minDepArrivalConfirm (int): the minimum number of blockchain confirmations to acknowledge fund deposit.
             The account is credited after that, but the deposit can not be withdrawn.
-        minFee (float): the minimum withdrawal fee for normal address.
-        minFeeForCtAddr (float): the minimum withdrawal fee for contract address.
+        minFee (Decimal): the minimum withdrawal fee for normal address.
+        minFeeForCtAddr (Decimal): the minimum withdrawal fee for contract address.
         minWd (float): the minimum withdrawal amount of the currency in a single transaction.
         minWdUnlockConfirm (int): the minimum number of blockchain confirmations required for withdrawal of a deposit.
         name (str): name of currency. There is no related name when it is not shown.
@@ -62,13 +63,13 @@ class Currency(ReprWithoutData):
         self.depQuoteDailyLayer2 = float(self.depQuoteDailyLayer2) if self.depQuoteDailyLayer2 else None
         self.logoLink: str = data.get('logoLink')
         self.mainNet: bool = data.get('mainNet')
-        self.maxFee: float = float(data.get('maxFee'))
-        self.maxFeeForCtAddr: float = float(data.get('maxFeeForCtAddr'))
+        self.maxFee: Decimal = Decimal(str(data.get('maxFee')))
+        self.maxFeeForCtAddr: Decimal = Decimal(str(data.get('maxFeeForCtAddr')))
         self.maxWd: float = float(data.get('maxWd'))
         self.minDep: float = float(data.get('minDep'))
         self.minDepArrivalConfirm: int = int(data.get('minDepArrivalConfirm'))
-        self.minFee: float = float(data.get('minFee'))
-        self.minFeeForCtAddr: float = float(data.get('minFeeForCtAddr'))
+        self.minFee: Decimal = Decimal(str(data.get('minFee')))
+        self.minFeeForCtAddr: Decimal = Decimal(str(data.get('minFeeForCtAddr')))
         self.minWd: float = float(data.get('minWd'))
         self.minWdUnlockConfirm: int = int(data.get('minWdUnlockConfirm'))
         self.name: str = data.get('name')
