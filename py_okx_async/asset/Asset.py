@@ -212,7 +212,7 @@ class Asset(Base):
         method = 'withdrawal'
         if not fee:
             currency = await self.currencies(token_symbol=token_symbol)
-            fee = currency[token_symbol][chain].minFee
+            fee = currency[token_symbol][chain].fee
 
         body = {
             'ccy': token_symbol,
