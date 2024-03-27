@@ -89,22 +89,19 @@ class Chains:
     Casper = 'Casper'
     Celestia = 'Celestia'
     Chia = 'Chia'
+    Chiliz2_0Chain = 'Chiliz 2.0 Chain'
     ChilizChain = 'Chiliz Chain'
-    ChilizLegacyChain = 'Chiliz Legacy Chain'
     Conflux = 'Conflux'
     Cortex = 'Cortex'
     Cosmos = 'Cosmos'
     Crypto = 'Crypto'
     DYDX = 'DYDX'
-    Decred = 'Decred'
     Dfinity = 'Dfinity'
     Digibyte = 'Digibyte'
-    DigitalCash = 'Digital Cash'
     Dogecoin = 'Dogecoin'
     EOS = 'EOS'
     ERC20 = 'ERC20'
     Elrond = 'Elrond'
-    Eminer = 'Eminer'
     EnduranceSmartChain = 'Endurance Smart Chain'
     EnjinRelayChain = 'Enjin Relay Chain'
     EthereumClassic = 'Ethereum Classic'
@@ -114,13 +111,12 @@ class Chains:
     Fantom = 'Fantom'
     Filecoin = 'Filecoin'
     Flare = 'Flare'
+    GravityAlphaMainnet = 'Gravity Alpha Mainnet'
     Harmony = 'Harmony'
     Hedera = 'Hedera'
-    HyperCash = 'HyperCash'
     ICON = 'ICON'
     INJ = 'INJ'
     IOST = 'IOST'
-    KAR = 'KAR'
     Kadena = 'Kadena'
     Khala = 'Khala'
     Klaytn = 'Klaytn'
@@ -128,9 +124,9 @@ class Chains:
     Layer3 = 'Layer 3'
     Lightning = 'Lightning'
     Linea = 'Linea'
-    Linkeye = 'Linkeye'
     Lisk = 'Lisk'
     Litecoin = 'Litecoin'
+    MERLINNetwork = 'MERLIN Network'
     MIOTA = 'MIOTA'
     Metis = 'Metis'
     MetisTokenTransfer = 'Metis (Token Transfer)'
@@ -139,16 +135,12 @@ class Chains:
     Moonriver = 'Moonriver'
     N3 = 'N3'
     NEAR = 'NEAR'
-    NEO = 'NEO'
     NULS = 'NULS'
     Nano = 'Nano'
-    NewEconomyMovement = 'New Economy Movement'
     OASYS = 'OASYS'
     OKTC = 'OKTC'
-    OmegaChain = 'Omega Chain'
     Ontology = 'Ontology'
     Optimism = 'Optimism'
-    OptimismBridged = 'Optimism (Bridged)'
     OptimismV2 = 'Optimism (V2)'
     PlatON = 'PlatON'
     Polkadot = 'Polkadot'
@@ -163,19 +155,16 @@ class Chains:
     Solana = 'Solana'
     Starknet = 'Starknet'
     StellarLumens = 'Stellar Lumens'
-    StepNetwork = 'Step Network'
     TON = 'TON'
     TRC20 = 'TRC20'
     Terra = 'Terra'
     TerraClassic = 'Terra Classic'
+    TerraClassicUSTC = 'Terra Classic (USTC)'
     Tezos = 'Tezos'
     Theta = 'Theta'
-    VSYSTEMS = 'VSYSTEMS'
-    WGRT = 'WGRT'
+    Venom = 'Venom'
     Wax = 'Wax'
-    XANA = 'XANA'
-    XEC = 'XEC'
-    Zcash = 'Zcash'
+    XLayer = 'X Layer'
     ZetaChain = 'ZetaChain'
     Zilliqa = 'Zilliqa'
     lStacks = 'l-Stacks'
@@ -205,22 +194,19 @@ class Chains:
         'casper': Casper,
         'celestia': Celestia,
         'chia': Chia,
+        'chiliz 2.0 chain': Chiliz2_0Chain,
         'chiliz chain': ChilizChain,
-        'chiliz legacy chain': ChilizLegacyChain,
         'conflux': Conflux,
         'cortex': Cortex,
         'cosmos': Cosmos,
         'crypto': Crypto,
         'dydx': DYDX,
-        'decred': Decred,
         'dfinity': Dfinity,
         'digibyte': Digibyte,
-        'digital cash': DigitalCash,
         'dogecoin': Dogecoin,
         'eos': EOS,
         'erc20': ERC20,
         'elrond': Elrond,
-        'eminer': Eminer,
         'endurance smart chain': EnduranceSmartChain,
         'enjin relay chain': EnjinRelayChain,
         'ethereum classic': EthereumClassic,
@@ -230,13 +216,12 @@ class Chains:
         'fantom': Fantom,
         'filecoin': Filecoin,
         'flare': Flare,
+        'gravity alpha mainnet': GravityAlphaMainnet,
         'harmony': Harmony,
         'hedera': Hedera,
-        'hypercash': HyperCash,
         'icon': ICON,
         'inj': INJ,
         'iost': IOST,
-        'kar': KAR,
         'kadena': Kadena,
         'khala': Khala,
         'klaytn': Klaytn,
@@ -244,9 +229,9 @@ class Chains:
         'layer 3': Layer3,
         'lightning': Lightning,
         'linea': Linea,
-        'linkeye': Linkeye,
         'lisk': Lisk,
         'litecoin': Litecoin,
+        'merlin network': MERLINNetwork,
         'miota': MIOTA,
         'metis': Metis,
         'Metis (Token Transfer)': MetisTokenTransfer,
@@ -255,16 +240,12 @@ class Chains:
         'moonriver': Moonriver,
         'n3': N3,
         'near': NEAR,
-        'neo': NEO,
         'nuls': NULS,
         'nano': Nano,
-        'new economy movement': NewEconomyMovement,
         'oasys': OASYS,
         'oktc': OKTC,
-        'omega chain': OmegaChain,
         'ontology': Ontology,
         'optimism': Optimism,
-        'optimism (bridged)': OptimismBridged,
         'optimism (v2)': OptimismV2,
         'platon': PlatON,
         'polkadot': Polkadot,
@@ -279,19 +260,16 @@ class Chains:
         'solana': Solana,
         'starknet': Starknet,
         'stellar lumens': StellarLumens,
-        'step network': StepNetwork,
         'ton': TON,
         'trc20': TRC20,
         'terra': Terra,
         'terra classic': TerraClassic,
+        'terra classic (ustc)': TerraClassicUSTC,
         'tezos': Tezos,
         'theta': Theta,
-        'vsystems': VSYSTEMS,
-        'wgrt': WGRT,
+        'venom': Venom,
         'wax': Wax,
-        'xana': XANA,
-        'xec': XEC,
-        'zcash': Zcash,
+        'x layer': XLayer,
         'zetachain': ZetaChain,
         'zilliqa': Zilliqa,
         'l-stacks': lStacks,
