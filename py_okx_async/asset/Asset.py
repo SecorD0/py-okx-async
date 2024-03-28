@@ -220,7 +220,7 @@ class Asset(Base):
             'dest': dest.state,
             'toAddr': toAddr,
             'fee': str(fee),
-            'chain': chain if token_symbol in chain else f'{token_symbol}-{chain}',
+            'chain': f'{token_symbol}-{chain}',
             'areaCode': str(areaCode) if areaCode else None,
             'clientId': str(clientId) if clientId else None
         }
